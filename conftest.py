@@ -14,6 +14,7 @@ def browser():
     try:
         browser.get("https://target.my.com")
         browser.implicitly_wait(10)
+        browser.maximize_window()
         login_btn = browser.find_element(*locators.LOGIN_BTN_LOCATOR)
         login_btn.click()
         email_field = browser.find_element(*locators.EMAIL_FIELD_LOCATOR)
