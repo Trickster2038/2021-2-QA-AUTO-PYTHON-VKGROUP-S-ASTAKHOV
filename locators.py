@@ -17,4 +17,5 @@ PROFILE_SAVE_BTN_LOCATOR = (By.CLASS_NAME, 'button_submit')
 NOTIFICATION_LOCATOR = (By.CLASS_NAME, 'js-notification-content')
 SLIDER_USERNAME_LOCATOR = (By.XPATH, "//div[starts-with(@class, 'right-module-userNameWrap')]")
 
-# right-module-userNameWrap
+TAB_BILLING_LOCATOR = (By.XPATH, "//a[contains(@class, 'center-module-billing')]")
+TAB_STATS_LOCATOR = (By.XPATH, "//a[contains(@class, 'center-module-statistics')]")
