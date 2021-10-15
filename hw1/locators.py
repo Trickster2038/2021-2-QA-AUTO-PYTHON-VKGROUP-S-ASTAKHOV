@@ -13,6 +13,7 @@ MAINPAGE_BANNER_LOCATOR = (By.XPATH, "//div[starts-with(@class, 'mainPage-module
 
 PROFILE_TAB_LOCATOR = (By.CSS_SELECTOR, 'a[href="/profile"]')
 FIO_FIELD_LOCATOR = (By.CSS_SELECTOR, 'div[data-name="fio"] > * > input')
+PHONE_FIELD_LOCATOR = (By.CSS_SELECTOR, 'div[data-name="phone"] > * > input')
 PROFILE_SAVE_BTN_LOCATOR = (By.CLASS_NAME, 'button_submit')
 NOTIFICATION_LOCATOR = (By.CLASS_NAME, 'js-notification-content')
 SLIDER_USERNAME_LOCATOR = (By.XPATH, "//div[starts-with(@class, 'right-module-userNameWrap')]")

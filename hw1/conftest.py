@@ -11,7 +11,7 @@ generates browser(driver) object
 def browser():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--incognito") # user is not authed in this mode
-    browser = webdriver.Chrome(executable_path="./chromedriver", \
+    browser = webdriver.Chrome(executable_path="../chromedriver", \
         options=chrome_options)
     try:
         browser.get("https://target.my.com")

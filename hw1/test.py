@@ -34,7 +34,7 @@ def test_logout(browser):
 
 """
 1 - get to profile tab
-2 - enter new name
+2 - enter new name and phone
 3 - check notification
 4 - refresh
 5 - check new name in status bar
@@ -46,10 +46,17 @@ def test_edit(browser):
 
     tab = browser.find_element(*locators.PROFILE_TAB_LOCATOR)
     tab.click()
+
     fio = browser.find_element(*locators.FIO_FIELD_LOCATOR)
     name = random.choice(["abcd", "123", "Ivan Ivanov", "Qwerty"])
     fio.clear()
     fio.send_keys(name)
+
+    phone = browser.find_element(*locators.PHONE_FIELD_LOCATOR)
+    num = random.choice(["89055553535", "88007006050"])
+    phone.clear()
+    phone.send_keys(num)
+
     save = browser.find_element(*locators.PROFILE_SAVE_BTN_LOCATOR)
     save.click()
     assert len(browser.find_elements(*locators.NOTIFICATION_LOCATOR)) != 0
