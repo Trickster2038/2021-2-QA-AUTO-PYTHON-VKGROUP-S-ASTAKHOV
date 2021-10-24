@@ -1,7 +1,7 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import pytest
-from ui.pages.mainpage import MainPage
+from ui.pages.basepage import BasePage
 
 @pytest.fixture(scope='function', autouse=True)
 def browser():
@@ -13,7 +13,8 @@ def browser():
 
 @pytest.fixture(scope='function', autouse=False)
 def login(browser):
-    page = MainPage(browser)
-    page.go_to_page()
+    page = BasePage(browser)
+    page.go_to_main()
     page.login("tttshelby6@gmail.com", "S3leniumpass")
     yield page
+
