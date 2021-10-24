@@ -18,3 +18,9 @@ class BasePage:
         pass_field.send_keys(password)
         submit_btn = self.driver.find_element(*self.locators.LOGIN_SUBMIT)
         submit_btn.click()
+
+    def find(self, locator):
+        return self.driver.find_element(*locator)
+
+    def exist(self, locator):
+        return len(self.driver.find_elements(*locator)) != 0

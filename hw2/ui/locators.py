@@ -5,4 +5,5 @@ class BasePageLocators:
     EMAIL_FIELD = (By.CSS_SELECTOR, 'input[name="email"]')
     PASSWORD_FIELD = (By.CSS_SELECTOR, 'input[name="password"]')
     LOGIN_SUBMIT = (By.XPATH, "//div[starts-with(@class, 'authForm-module-button')]")
+    UNSUPPORTED_LOGIN_NOTICE = (By.XPATH, "//div[starts-with(@class,'notify')]")
     
