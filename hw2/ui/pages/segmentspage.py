@@ -4,6 +4,7 @@ from ui.locators import SegmentPageLocators
 from selenium.webdriver.common.by import By
 import time
 import allure
+from allure_commons.types import AttachmentType
 
 
 class SegmentPage(BasePage):
@@ -13,8 +14,12 @@ class SegmentPage(BasePage):
     @allure.step("Open segment creating page")
     def go_to_creating(self):
         if self.is_displayed(self.locators.NEW_SEGMENT_BTN):
+            allure.attach(self.driver.get_screenshot_as_png(),
+                          name="Segments_page", attachment_type=AttachmentType.PNG)
             self.click(self.locators.NEW_SEGMENT_BTN)
         else:
+            allure.attach(self.driver.get_screenshot_as_png(),
+                          name="Segments_page", attachment_type=AttachmentType.PNG)
             self.click(self.locators.FIRST_SEGMENT_BTN)
 
     @allure.step("Create new segment")

@@ -3,6 +3,7 @@ from ui.locators import CampaignPageLocators
 from selenium.webdriver.common.by import By
 import os
 import allure
+from allure_commons.types import AttachmentType
 
 
 class CampaignPage(BasePage):
@@ -12,9 +13,13 @@ class CampaignPage(BasePage):
     @allure.step("Go to campaign creating page")
     def go_to_creating(self):
         if self.is_displayed(self.locators.NEW_CAMPAIGN_BTN):
+            allure.attach(self.driver.get_screenshot_as_png(),
+                          name="Campaigns_page", attachment_type=AttachmentType.PNG)
             self.click(self.locators.NEW_CAMPAIGN_BTN)
         else:
             self.wait_clickable(self.locators.FIRST_CAMPAIGN_BTN)
+            allure.attach(self.driver.get_screenshot_as_png(),
+                          name="Campaigns_page", attachment_type=AttachmentType.PNG)
             self.click(self.locators.FIRST_CAMPAIGN_BTN)
 
     @allure.step("Create new campaign")
@@ -29,7 +34,8 @@ class CampaignPage(BasePage):
 
         self.click(self.locators.BANNER_FORMAT_IMAGE)
 
-        photo_path = os.path.abspath(os.path.join("media", "default_campaign.jpg"))
+        photo_path = os.path.abspath(
+            os.path.join("media", "default_campaign.jpg"))
         self.send_file(self.locators.IMAGE_INPUT, photo_path)
         self.click(self.locators.IMAGE_SAVE)
 
@@ -45,7 +51,7 @@ class CampaignPage(BasePage):
         date_fields[1].send_keys("07.01.2022")
 
         self.send_keys(self.locators.CAMPAIGN_BUDGET_PER_DAY, "100")
-        
+
         self.click(self.locators.SUBMIT_CAMPAIGN)
 
         return name
@@ -53,5 +59,3 @@ class CampaignPage(BasePage):
     def campaign_exist(self, name):
         selector = f"//a[contains(@title,'{name}')]"
         return self.exist((By.XPATH, selector))
-
-    
