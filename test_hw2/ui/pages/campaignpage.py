@@ -29,7 +29,7 @@ class CampaignPage(BasePage):
         self.click(self.locators.COVERAGE_ADVERTISE)
         self.send_keys(self.locators.CAMPAIGN_URL, "https://vk.com/e_mail_ru")
 
-        name_input = self.find(self.locators.CAMPAIGN_NAME_INPUT)
+        name_input = self.send_suffux(self.locators.CAMPAIGN_NAME_INPUT)
         name = name_input.get_attribute('value')
 
         self.click(self.locators.BANNER_FORMAT_IMAGE)

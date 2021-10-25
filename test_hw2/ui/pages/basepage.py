@@ -1,10 +1,10 @@
-import pytest
 from ui.locators import BasePageLocators
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import logging 
 import allure
-
+import string
+import random
 
 class BasePage:
 
@@ -56,6 +56,17 @@ class BasePage:
         elem = self.find(locator)
         elem.clear()
         return elem.send_keys(text)
+
+    def send_suffux(self, locator):
+        """
+        adds unique suffix to default fileds placeholders
+        """
+        suffix = ''.join(random.choice(string.ascii_lowercase)
+                     for _ in range(10))
+        self.logger.info(f"Send suffix '{suffix}' to {locator}")
+        elem = self.find(locator)
+        elem.send_keys(" " + suffix)
+        return elem
 
     def send_file(self, locator, filepath):
         self.logger.info(f"Send file '{filepath}' to {locator}")

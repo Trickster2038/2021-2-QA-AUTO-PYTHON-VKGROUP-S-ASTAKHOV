@@ -29,7 +29,7 @@ class SegmentPage(BasePage):
         self.click(self.locators.SEGMENT_SOURCE_PAYED_N_PLAYED)
         self.click(self.locators.SUBMIT_SOURCE_BTN)
 
-        name_input = self.find(self.locators.SEGMENT_NAME_INPUT)
+        name_input = self.send_suffux(self.locators.SEGMENT_NAME_INPUT)
         name = name_input.get_attribute('value')
 
         self.click(self.locators.SUBMIT_SEGMENT)
