@@ -35,7 +35,7 @@ class CampaignPage(BasePage):
         self.click(self.locators.BANNER_FORMAT_IMAGE)
 
         photo_path = os.path.abspath(
-            os.path.join("media", "default_campaign.jpg"))
+            os.path.join("test_hw2", "media", "default_campaign.jpg"))
         self.send_file(self.locators.IMAGE_INPUT, photo_path)
         self.click(self.locators.IMAGE_SAVE)
 
