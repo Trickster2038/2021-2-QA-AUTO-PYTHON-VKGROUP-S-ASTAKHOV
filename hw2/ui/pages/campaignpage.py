@@ -9,10 +9,11 @@ class CampaignPage(BasePage):
     locators = CampaignPageLocators
 
     def go_to_creating(self):
-        if self.exist(self.locators.FIRST_CAMPAIGN_BTN):
-            self.click(self.locators.FIRST_CAMPAIGN_BTN)
-        else:
+        if self.is_displayed(self.locators.NEW_CAMPAIGN_BTN):
             self.click(self.locators.NEW_CAMPAIGN_BTN)
+        else:
+            self.wait_clickable(self.locators.FIRST_CAMPAIGN_BTN)
+            self.click(self.locators.FIRST_CAMPAIGN_BTN)
 
     def create_campaign_default(self, title="Cmpg caption", body_text="Lorem ipsum"):
         self.go_to_creating()
@@ -21,7 +22,7 @@ class CampaignPage(BasePage):
         self.send_keys(self.locators.CAMPAIGN_URL, "https://vk.com/e_mail_ru")
 
         name_input = self.find(self.locators.CAMPAIGN_NAME_INPUT)
-        self.last_campaign_name = name_input.text
+        name = name_input.get_attribute('value')
 
         self.click(self.locators.BANNER_FORMAT_IMAGE)
 
@@ -44,8 +45,10 @@ class CampaignPage(BasePage):
         
         self.click(self.locators.SUBMIT_CAMPAIGN)
 
-    def last_campaign_added(self):
-        selector = f"//a[contains(@title,'{self.last_campaign_name}')]"
+        return name
+
+    def campaign_exist(self, name):
+        selector = f"//a[contains(@title,'{name}')]"
         return self.exist((By.XPATH, selector))
 
     

@@ -1,5 +1,7 @@
 import pytest
 from ui.locators import BasePageLocators
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class BasePage:
@@ -14,6 +16,9 @@ class BasePage:
 
     def go_to_campaign(self):
         return self.click(self.locators.TAB_CAMPAIGN)
+
+    def go_to_segments(self):
+        return self.click(self.locators.TAB_SEGMENTS)
 
     def login(self, username, password):
         login_btn = self.driver.find_element(*self.locators.LOGIN_BTN)
@@ -45,3 +50,15 @@ class BasePage:
     def send_file(self, locator, text):
         elem = self.find(locator)
         return elem.send_keys(text)
+
+    def wait_clickable(self, locator):
+        return WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(locator))
+
+    def wait_expired(self, locator):
+        return WebDriverWait(self.driver, 10).until(
+            EC.invisibility_of_element_located(locator))
+
+    def is_displayed(self, locator):
+        elem = self.find(locator)
+        return elem.is_displayed()

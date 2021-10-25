@@ -1,10 +1,13 @@
 from ui.pages.basepage import BasePage
 from ui.pages.campaignpage import CampaignPage
+from ui.pages.segmentspage import SegmentPage
 import time
 import allure
 from selenium.webdriver.chrome.webdriver import WebDriver
 from ui.locators import BasePageLocators, CampaignPageLocators
 import pytest
+
+from ui.pages.segmentspage import SegmentPage
 
 @pytest.mark.skip
 @pytest.mark.UI
@@ -22,13 +25,30 @@ def test_auth_bad_password(browser: WebDriver):
     page.login("123@gmail.com", "bbb")
     assert browser.current_url.count("login/?error_code=1") != 0
 
+@pytest.mark.skip
 @pytest.mark.UI
 def test_create_campaign(browser: WebDriver, login):
     cmpg_page = CampaignPage(browser)
     cmpg_page.go_to_campaign()
-    cmpg_page.create_campaign_default()
-    assert cmpg_page.last_campaign_added()
+    name = cmpg_page.create_campaign_default()
+    assert cmpg_page.campaign_exist(name)
 
+@pytest.mark.skip
+@pytest.mark.UI
+def test_create_segment(browser: WebDriver, login):
+    seg_page = SegmentPage(browser)
+    seg_page.go_to_segments()
+    name = seg_page.create_segment_default()
+    assert seg_page.segment_exist(name)
+
+@pytest.mark.UI
+def test_delete_segment(browser: WebDriver, login):
+    seg_page = SegmentPage(browser)
+    seg_page.go_to_segments()
+    name = seg_page.create_segment_default()
+    assert seg_page.segment_exist(name)
+    seg_page.delete_segment(name)
+    assert not seg_page.segment_exist(name)
 
 
 
