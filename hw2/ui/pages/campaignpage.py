@@ -2,12 +2,14 @@ from ui.pages.basepage import BasePage
 from ui.locators import CampaignPageLocators
 from selenium.webdriver.common.by import By
 import os
+import allure
 
 
 class CampaignPage(BasePage):
 
     locators = CampaignPageLocators
 
+    @allure.step("Go to campaign creating page")
     def go_to_creating(self):
         if self.is_displayed(self.locators.NEW_CAMPAIGN_BTN):
             self.click(self.locators.NEW_CAMPAIGN_BTN)
@@ -15,6 +17,7 @@ class CampaignPage(BasePage):
             self.wait_clickable(self.locators.FIRST_CAMPAIGN_BTN)
             self.click(self.locators.FIRST_CAMPAIGN_BTN)
 
+    @allure.step("Create new campaign")
     def create_campaign_default(self, title="Cmpg caption", body_text="Lorem ipsum"):
         self.go_to_creating()
 

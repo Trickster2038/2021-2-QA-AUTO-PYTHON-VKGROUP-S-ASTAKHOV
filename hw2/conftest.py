@@ -13,7 +13,6 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='function', autouse=True)
 def browser(logger):
-    # logger.info("hello log")
     browser = webdriver.Chrome(ChromeDriverManager().install())
     browser.implicitly_wait(5)
     browser.maximize_window()  # all tabs are on the screen
