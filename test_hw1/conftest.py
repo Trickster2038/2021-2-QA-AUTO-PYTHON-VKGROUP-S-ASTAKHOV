@@ -5,19 +5,18 @@ import random
 import string
 from selenium.common.exceptions import ElementClickInterceptedException
 
-"""
-Fixture automatically login and logout user,
-generates browser(driver) object
-"""
-
 
 @pytest.fixture(scope='function', autouse=False)
 def browser():
+    """
+    Fixture automatically login and logout user,
+    generates browser(driver) object
+    """
     chrome_options = webdriver.ChromeOptions()
 
     # user is not authed in this mode
     chrome_options.add_argument("--incognito")
-    browser = webdriver.Chrome(executable_path="../chromedriver",
+    browser = webdriver.Chrome(executable_path="./chromedriver",
                                options=chrome_options)
     try:
         browser.get("https://target.my.com")
@@ -50,8 +49,9 @@ def name():
                      for _ in range(length))
     return first + second
 
+
 @pytest.fixture(scope='function', autouse=False)
 def phone_num():
     num = ''.join(random.choice(string.digits)
-                     for _ in range(10))
+                  for _ in range(10))
     return '8' + num

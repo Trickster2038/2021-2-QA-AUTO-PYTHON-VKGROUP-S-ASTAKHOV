@@ -12,10 +12,7 @@ def test_login(browser):
     """
     Auth was made in fixture, just checking default page load
     """
-    assert len(browser.find_elements(
-        *locators.LOGIN_INSTRUCTIONS_LOCATOR)) != 0
-
-# @pytest.mark.flacky
+    assert browser.current_url.startswith("https://target.my.com/dashboard")
 
 
 @pytest.mark.UI
@@ -28,16 +25,16 @@ def test_logout(browser):
 
     # page reloads once before final rendering, so we need to wait for final rendering
     # before clickcking on slider
-    WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located(locators.LOGIN_INSTRUCTIONS_LOCATOR))
-    slider = browser.find_element(*locators.PROFILE_SLIDER_LOCATOR)
+    slider = WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable(locators.PROFILE_SLIDER_LOCATOR))
     slider.click()
-
-    WebDriverWait(browser, 10).until(
+    logout = WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(locators.LOGOUT_BTN_LOCATOR))
-    logout = browser.find_element(*locators.LOGOUT_BTN_LOCATOR)
     logout.click()
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located(locators.LOGIN_BTN_LOCATOR))
     assert len(browser.find_elements(*locators.LOGIN_BTN_LOCATOR)) != 0
+
 
 @pytest.mark.UI
 def test_edit_contacts(browser, name, phone_num):
