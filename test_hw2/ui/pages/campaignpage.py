@@ -13,6 +13,7 @@ class CampaignPage(BasePage):
     @allure.step("Go to campaign creating page")
     def go_to_creating(self):
         if self.is_displayed(self.locators.NEW_CAMPAIGN_BTN):
+            self.wait_visible(self.locators.TABLE_HEADERS)
             allure.attach(self.driver.get_screenshot_as_png(),
                           name="Campaigns_page", attachment_type=AttachmentType.PNG)
             self.click(self.locators.NEW_CAMPAIGN_BTN)

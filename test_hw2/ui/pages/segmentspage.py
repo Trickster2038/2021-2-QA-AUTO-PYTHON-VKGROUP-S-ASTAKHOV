@@ -14,6 +14,7 @@ class SegmentPage(BasePage):
     @allure.step("Open segment creating page")
     def go_to_creating(self):
         if self.is_displayed(self.locators.NEW_SEGMENT_BTN):
+            self.wait_visible(self.locators.TABLE_HEADERS)
             allure.attach(self.driver.get_screenshot_as_png(),
                           name="Segments_page", attachment_type=AttachmentType.PNG)
             self.click(self.locators.NEW_SEGMENT_BTN)

@@ -17,6 +17,8 @@ class BasePageLocators:
 
 
 class CampaignPageLocators(BasePageLocators):
+    TABLE_HEADERS = (By.XPATH, "//div[contains(@class, 'headerGroup')]")
+
     FIRST_CAMPAIGN_BTN = (By.CSS_SELECTOR, 'a[href="/campaign/new"')
     NEW_CAMPAIGN_BTN = (
         By.XPATH, "//div[contains(@class,'dashboard-module-createButtonWrap')]")
@@ -50,6 +52,7 @@ class CampaignPageLocators(BasePageLocators):
 
 
 class SegmentPageLocators(BasePageLocators):
+    TABLE_HEADERS = (By.XPATH, "//div[contains(@class, 'headerGroup')]")
 
     FIRST_SEGMENT_BTN = (
         By.CSS_SELECTOR, 'a[href="/segments/segments_list/new/"')
