@@ -43,12 +43,14 @@ def test_create_segment(browser: WebDriver, login):
 
 @pytest.mark.UI
 def test_delete_segment(browser: WebDriver, login):
-    seg_page = SegmentPage(browser)
-    seg_page.go_to_segments()
-    name = seg_page.create_segment_default()
-    assert seg_page.segment_exist(name)
-    seg_page.delete_segment(name)
-    assert not seg_page.segment_exist(name)
+    with allure.step("Create auditory segment"):
+        seg_page = SegmentPage(browser)
+        seg_page.go_to_segments()
+        name = seg_page.create_segment_default()
+        assert seg_page.segment_exist(name)
+    with allure.step("Delete auditory segment"):
+        seg_page.delete_segment(name)
+        assert not seg_page.segment_exist(name)
 
 
 
