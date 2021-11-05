@@ -62,3 +62,44 @@ class ApiBase:
             if x['name'] == name:
                 return True
         return False
+
+    def create_segment(self, name):
+        params = "?fields=relations__object_type,relations__object_id,relations__params,relations__params__score,relations__id,relations_count,id,name,pass_condition,created,campaign_ids,users,flags"
+        url = "https://target.my.com/api/v2/remarketing/segments.json" + params
+        headers = {
+            'X-CSRFToken': self.api_client.csrf_token,
+            'Cookie': self.api_client.cookie,
+            'Content-Type': 'application/json'
+        }
+        payload = SegmentJsons.DEFAULT
+        payload['name'] = name
+        payload = json.dumps(payload)
+        response = self.api_client.session.request(
+            "POST", url, headers=headers, data=payload)
+        return response
+
+    def get_segments(self):
+        params = "?fields=relations__object_type,relations__object_id,relations__params,relations__params__score,relations__id,relations_count,id,name,pass_condition,created,campaign_ids,users,flags&limit=500&_=1635848016171"
+        url = "https://target.my.com/api/v2/remarketing/segments.json" + params
+        headers = {
+            'Cookie': self.api_client.cookie
+        }
+        response = self.api_client.session.request("GET", url, headers=headers)
+        return response
+
+    def check_segment_presence(self, name):
+        segments = self.get_segments().json()
+        for x in segments['items']:
+            if x['name'] == name:
+                return True
+        return False
+
+    def delete_segment(self, id):
+        url = "https://target.my.com/api/v2/remarketing/segments/" + \
+            str(id) + ".json"
+        headers = {
+            'X-CSRFToken': self.api_client.csrf_token,
+            'Cookie': self.api_client.cookie
+        }
+        response = self.api_client.session.request("DELETE", url, headers=headers)
+        return response
