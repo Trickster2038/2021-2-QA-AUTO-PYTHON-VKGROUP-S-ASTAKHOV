@@ -12,7 +12,7 @@ class ApiClient:
         params = "?lang=ru&nosavelogin=0"
         url = "https://auth-ac.my.com/auth" + params
         headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Referer': 'https://target.my.com/'
         }
         username = urllib.parse.quote(username.encode('utf-8'))
