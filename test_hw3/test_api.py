@@ -7,7 +7,7 @@ class TestApi(ApiBase):
 
     @pytest.mark.skip
     @pytest.mark.API
-    def test_create_campaign(self):
+    def test_create_n_delete_campaign(self):
         name = "Новая кампания " + self.random_string()
         response = self.create_campaign(name)
         assert response.status_code == 200
