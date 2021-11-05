@@ -1,11 +1,9 @@
 import pytest
 from base import ApiBase
 
-# resp.json()['id']
 
 class TestApi(ApiBase):
 
-    @pytest.mark.skip
     @pytest.mark.API
     def test_create_n_delete_campaign(self):
         name = "Новая кампания " + self.random_string()
@@ -17,7 +15,6 @@ class TestApi(ApiBase):
         assert resp_delete.status_code == 204
         assert not self.check_campaign_presence(name)
 
-    @pytest.mark.skip
     @pytest.mark.API
     def test_create_segment(self):
         name = "Новый сегмент " + self.random_string()
@@ -34,4 +31,3 @@ class TestApi(ApiBase):
         resp_delete = self.delete_segment(id)
         assert resp_delete.status_code == 204
         assert not self.check_segment_presence(name)
-

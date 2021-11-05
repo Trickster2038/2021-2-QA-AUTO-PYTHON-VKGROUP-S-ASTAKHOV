@@ -1,5 +1,5 @@
 import pytest
-from jsons import *
+from api.jsons import *
 import json
 import random
 import string
@@ -12,7 +12,7 @@ class ApiBase:
 
     def random_string(self, length=10):
         strg = ''.join(random.choice(string.ascii_lowercase)
-                     for _ in range(length))
+                       for _ in range(length))
         return strg
 
     def create_campaign(self, name):
@@ -101,5 +101,6 @@ class ApiBase:
             'X-CSRFToken': self.api_client.csrf_token,
             'Cookie': self.api_client.cookie
         }
-        response = self.api_client.session.request("DELETE", url, headers=headers)
+        response = self.api_client.session.request(
+            "DELETE", url, headers=headers)
         return response
