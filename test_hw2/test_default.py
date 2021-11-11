@@ -6,7 +6,7 @@ import allure
 from selenium.webdriver.chrome.webdriver import WebDriver
 from ui.locators import BasePageLocators
 import pytest
-
+import os
 from ui.pages.segmentspage import SegmentPage
 from allure_commons.types import AttachmentType
 
@@ -42,10 +42,11 @@ def test_auth_bad_password(browser: WebDriver):
 @allure.feature("campaigns")
 @allure.story("create campaign")
 @pytest.mark.UI
-def test_create_campaign(browser: WebDriver, login):
+def test_create_campaign(browser: WebDriver, login, repo_root):
     cmpg_page = CampaignPage(browser)
     cmpg_page.go_to_campaign()
-    name = cmpg_page.create_campaign_default()
+    photo_path = os.path.join(repo_root, "media", "default_campaign.jpg")
+    name = cmpg_page.create_campaign_default(photo_path)
     assert cmpg_page.campaign_exist(name)
 
 
@@ -58,6 +59,7 @@ def test_create_segment(browser: WebDriver, login):
     seg_page.go_to_segments()
     name = seg_page.create_segment_default()
     assert seg_page.segment_exist(name)
+    seg_page.delete_segment(name)
 
 
 @allure.epic("UI")

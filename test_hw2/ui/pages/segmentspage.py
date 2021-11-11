@@ -46,7 +46,12 @@ class SegmentPage(BasePage):
     @allure.step("Segment deleted")
     def delete_segment(self, name):
         self.logger.info(f"Deleting {name} segment")
-        selector = f"//a[contains(@title, '{name}')]/../../following-sibling::div[4]/span"
-        self.click((By.XPATH, selector))
+
+        selector = f"//a[contains(@title, '{name}')]"
+        cell = self.find((By.XPATH, selector))
+        id = cell.get_attribute("href").split("/")[-1]
+
+        selector_delete_btn = f"//div[contains(@data-test, 'remove-{id}')]"
+        self.click((By.XPATH, selector_delete_btn))
         self.click(self.locators.CONFIRM_DELETE)
         return self.wait_expired((By.XPATH, f"//a[contains(@title,'{name}') and not(@hidden)]"))

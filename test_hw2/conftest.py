@@ -7,6 +7,7 @@ import allure
 import os
 import sys
 import shutil
+from credentials import Credentials
 
 def pytest_addoption(parser):
     parser.addoption('--debug_log', action='store_true')
@@ -23,7 +24,7 @@ def browser(logger):
 def login(browser):
     page = BasePage(browser)
     page.go_to_main()
-    page.login("tttshelby6@gmail.com", "S3leniumpass")
+    page.login(Credentials.LOGIN, Credentials.PASSWORD)
     yield page
 
 # === temp dirs, allure and logs settings ===

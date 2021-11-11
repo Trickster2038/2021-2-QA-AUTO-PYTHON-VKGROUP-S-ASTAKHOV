@@ -24,7 +24,7 @@ class CampaignPage(BasePage):
             self.click(self.locators.FIRST_CAMPAIGN_BTN)
 
     @allure.step("Create new campaign")
-    def create_campaign_default(self, title="Cmpg caption", body_text="Lorem ipsum"):
+    def create_campaign_default(self, photo_path, title="Cmpg caption", body_text="Lorem ipsum"):
         self.go_to_creating()
 
         self.click(self.locators.COVERAGE_ADVERTISE)
@@ -34,9 +34,6 @@ class CampaignPage(BasePage):
         name = name_input.get_attribute('value')
 
         self.click(self.locators.BANNER_FORMAT_IMAGE)
-
-        photo_path = os.path.abspath(
-            os.path.join("test_hw2", "media", "default_campaign.jpg"))
         self.send_file(self.locators.IMAGE_INPUT, photo_path)
         self.click(self.locators.IMAGE_SAVE)
 
@@ -46,10 +43,11 @@ class CampaignPage(BasePage):
         self.click(self.locators.SUBMIT_BANNER)
 
         date_fields = self.find_all(self.locators.CAMPAIGN_DATES)
-        date_fields[0].clear()
-        date_fields[0].send_keys("01.01.2022")
-        date_fields[1].clear()
-        date_fields[1].send_keys("07.01.2022")
+        date_from, date_to = date_fields[0:2]
+        date_from.clear()
+        date_from.send_keys("01.01.2022")
+        date_to.clear()
+        date_to.send_keys("07.01.2022")
 
         self.send_keys(self.locators.CAMPAIGN_BUDGET_PER_DAY, "100")
 
