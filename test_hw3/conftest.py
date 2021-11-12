@@ -6,5 +6,5 @@ from api.credentials import Credentials
 @pytest.fixture(scope="function", autouse=True)
 def client():
     client = ApiClient()
-    client.login(Credentials.LOGIN, Credentials.PASSWORD)
+    client.post_login(Credentials.LOGIN, Credentials.PASSWORD)
     yield client
