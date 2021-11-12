@@ -339,15 +339,15 @@ class CampaignJsons:
             {
                 "urls": {
                     "primary": {
-                        "id": 14570324
+                        "id": None
                     }
                 },
                 "textblocks": {
                     "title_25": {
-                        "text": "AAAln"
+                        "text": "Title 25"
                     },
                     "text_90": {
-                        "text": "Lnlnkln"
+                        "text": "Text 90"
                     },
                     "cta_sites_full": {
                         "text": "visitSite"

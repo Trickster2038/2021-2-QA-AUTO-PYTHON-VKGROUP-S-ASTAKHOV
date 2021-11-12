@@ -9,8 +9,9 @@ class ApiClient:
 
     csrf_token = None
 
-    def __init__(self):
+    def __init__(self, media_root):
         self.session = requests.Session()
+        self.media_root = media_root
 
     def post_login(self, username, passw):
         url = "https://auth-ac.my.com/auth"
@@ -35,10 +36,9 @@ class ApiClient:
 
     def post_create_campaign(self, name):
         payload = CampaignJsons.DEFAULT
-
-        pic_id = self.post_upload_image()
-        # self.post_attach_image(pic_id)
-        payload["banners"][0]["content"]["image_90x75"]["id"] = pic_id
+        
+        payload["banners"][0]["content"]["image_90x75"]["id"] = self.post_upload_image()
+        payload["banners"][0]["urls"]["primary"]["id"] = self.get_url_id()
         payload['name'] = name
         payload = json.dumps(payload)
         url = "https://target.my.com/api/v2/campaigns.json"
@@ -86,23 +86,19 @@ class ApiClient:
 
     def post_upload_image(self):
         url = "https://target.my.com/api/v2/content/static.json"
+        pic_path = os.path.join(self.media_root, 'banner.jpg')
         headers = {
             'X-CSRFToken': self.csrf_token,
         }
         file = {
-            'file': (os.path.basename('banner.jpg'), open('banner.jpg', 'rb'), 'image/jpeg'),
+            'file': (os.path.basename(pic_path), open(pic_path, 'rb'), 'image/jpeg'),
             'data': (None, json.dumps({"width": 0, "height": 0})),
         }
         resp = self.session.request(
             "POST", url, headers=headers, files=file)
         return int(resp.json()["id"])
 
-    def post_attach_image(self, id):
-        url = "https://target.my.com/api/v2/mediateka.json"
-        headers = {
-            'X-CSRFToken': self.csrf_token,
-            'Content-Type': 'application/json'
-        }
-        payload = json.dumps(
-            {"description": "banner.jpg", "content": {"id": id}})
-        resp = self.session.request("POST", url, headers=headers, data=payload)
+    def get_url_id(self, target_url="https://vk.com/feed"):
+        target_url = urllib.parse.quote(target_url.encode('utf-8'))
+        url = f"https://target.my.com/api/v1/urls/?url={target_url}"
+        return self.session.request("GET", url).json()["id"]
