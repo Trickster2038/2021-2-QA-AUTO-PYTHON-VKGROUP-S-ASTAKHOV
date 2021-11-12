@@ -4,7 +4,7 @@ from utils.rand import RandString
 
 
 class TestApi(ApiBase):
-
+    @pytest.mark.F
     @pytest.mark.API
     def test_create_n_delete_campaign(self):
         name = RandString.generate(prefix="Новый сегмент")

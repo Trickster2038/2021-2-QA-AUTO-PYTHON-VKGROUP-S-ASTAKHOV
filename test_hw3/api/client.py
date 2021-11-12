@@ -2,6 +2,7 @@ import requests
 import urllib
 from api.jsons import *
 import json
+import os
 
 
 class ApiClient:
@@ -34,6 +35,10 @@ class ApiClient:
 
     def post_create_campaign(self, name):
         payload = CampaignJsons.DEFAULT
+
+        pic_id = self.post_upload_image()
+        # self.post_attach_image(pic_id)
+        payload["banners"][0]["content"]["image_90x75"]["id"] = pic_id
         payload['name'] = name
         payload = json.dumps(payload)
         url = "https://target.my.com/api/v2/campaigns.json"
@@ -78,3 +83,26 @@ class ApiClient:
             'X-CSRFToken': self.csrf_token,
         }
         return self.session.request("DELETE", url, headers=headers)
+
+    def post_upload_image(self):
+        url = "https://target.my.com/api/v2/content/static.json"
+        headers = {
+            'X-CSRFToken': self.csrf_token,
+        }
+        file = {
+            'file': (os.path.basename('banner.jpg'), open('banner.jpg', 'rb'), 'image/jpeg'),
+            'data': (None, json.dumps({"width": 0, "height": 0})),
+        }
+        resp = self.session.request(
+            "POST", url, headers=headers, files=file)
+        return int(resp.json()["id"])
+
+    def post_attach_image(self, id):
+        url = "https://target.my.com/api/v2/mediateka.json"
+        headers = {
+            'X-CSRFToken': self.csrf_token,
+            'Content-Type': 'application/json'
+        }
+        payload = json.dumps(
+            {"description": "banner.jpg", "content": {"id": id}})
+        resp = self.session.request("POST", url, headers=headers, data=payload)
