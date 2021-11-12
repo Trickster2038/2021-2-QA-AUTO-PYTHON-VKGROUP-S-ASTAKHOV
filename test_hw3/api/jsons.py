@@ -1,5 +1,5 @@
 class SegmentJsons:
-    DEFAULT = payload = {
+    DEFAULT = {
         "name": None,
         "pass_condition": 1,
         "relations": [

@@ -41,9 +41,8 @@ class ApiClient:
             'X-CSRFToken': self.csrf_token,
             'Content-Type': 'application/json'
         }
-        response = self.session.request(
+        return self.session.request(
             "POST", url, headers=headers, data=payload)
-        return response
 
     def post_remove_campaign(self, id):
         url = "https://target.my.com/api/v2/campaigns/mass_action.json"
@@ -51,26 +50,15 @@ class ApiClient:
             'X-CSRFToken': self.csrf_token,
             'Content-Type': 'application/json'
         }
-        payload = [
-            {
-                "id": id,
-                "status": "deleted"
-            }
-        ]
-        payload = json.dumps(payload)
-        response = self.session.request(
-            "POST", url, headers=headers, data=payload)
-        return response
+        payload = json.dumps([{"id": id, "status": "deleted"}])
+        return self.session.request("POST", url, headers=headers, data=payload)
 
     def get_campaigns(self):
-        params = "?fields=id%2Cname%2Cdelivery%2Cprice%2Cbudget_limit%2Cbudget_limit_day%2Cpads_ots_limits%2Ccreated%2Cissues%2Cprices%2Cstatus%2Cpackage_id%2Cinterface_read_only%2Cread_only%2Cobjective%2Cuser_id%2Ctargetings__split_audience%2Ctargetings__pads%2Cenable_utm%2Cutm%2Cage_restrictions%2Cpackage_priced_event_type%2Cautobidding_mode&sorting=-id&limit=10&offset=0&_status__in=active&_user_id__in=11727528&_=1635850432320"
-        url = "https://target.my.com/api/v2/campaigns.json" + params
-        response = self.session.request("GET", url)
-        return response
+        url = "https://target.my.com/api/v2/campaigns.json?fields=id%2Cname%2Cautobidding_mode&_status__in=active"
+        return self.session.request("GET", url)
 
     def post_create_segment(self, name):
-        params = "?fields=relations__object_type,relations__object_id,relations__params,relations__params__score,relations__id,relations_count,id,name,pass_condition,created,campaign_ids,users,flags"
-        url = "https://target.my.com/api/v2/remarketing/segments.json" + params
+        url = "https://target.my.com/api/v2/remarketing/segments.json"
         headers = {
             'X-CSRFToken': self.csrf_token,
             'Content-Type': 'application/json'
@@ -78,22 +66,15 @@ class ApiClient:
         payload = SegmentJsons.DEFAULT
         payload['name'] = name
         payload = json.dumps(payload)
-        response = self.session.request(
-            "POST", url, headers=headers, data=payload)
-        return response
+        return self.session.request("POST", url, headers=headers, data=payload)
 
     def get_segments(self):
-        params = "?fields=relations__object_type,relations__object_id,relations__params,relations__params__score,relations__id,relations_count,id,name,pass_condition,created,campaign_ids,users,flags&limit=500&_=1635848016171"
-        url = "https://target.my.com/api/v2/remarketing/segments.json" + params
-        response = self.session.request("GET", url)
-        return response
+        url = "https://target.my.com/api/v2/remarketing/segments.json?fields=id,name&limit=500"
+        return self.session.request("GET", url)
 
     def delete_segment(self, id):
-        url = "https://target.my.com/api/v2/remarketing/segments/" + \
-            str(id) + ".json"
+        url = f"https://target.my.com/api/v2/remarketing/segments/{id}.json"
         headers = {
             'X-CSRFToken': self.csrf_token,
         }
-        response = self.session.request(
-            "DELETE", url, headers=headers)
-        return response
+        return self.session.request("DELETE", url, headers=headers)
