@@ -50,6 +50,10 @@ class MysqlORMClient:
         if not inspect(self.engine).has_table('client_errors_requests'):
             Base.metadata.tables['client_errors_requests'].create(self.engine)
 
+    def create_frequent_requests_table(self):
+        if not inspect(self.engine).has_table('frequent_requests'):
+            Base.metadata.tables['frequent_requests'].create(self.engine)
+
 
     def execute_query(self, query, fetch=True):
         res = self.connection.execute(query)

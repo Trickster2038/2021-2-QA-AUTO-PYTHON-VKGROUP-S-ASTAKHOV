@@ -15,7 +15,7 @@ def pytest_configure(config):
         mysql_orm_client.create_count_table()
         mysql_orm_client.create_typed_requests_table()
         mysql_orm_client.create_client_errors_requests_table()
-
+        mysql_orm_client.create_frequent_requests_table()
     config.mysql_orm_client = mysql_orm_client
 
 

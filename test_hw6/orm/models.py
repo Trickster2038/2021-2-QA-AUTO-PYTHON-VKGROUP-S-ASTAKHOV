@@ -19,6 +19,13 @@ class TypedRequests(Base):
     method = Column(String(length=10), nullable=False)
     count = Column(Integer, nullable=False)
 
+class FrequentRequests(Base):
+    __tablename__ = 'frequent_requests'
+    __table_args__ = {'mysql_charset': 'utf8'}
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    url = Column(String(length=400), nullable=False)
+    count = Column(Integer, nullable=False)
+
 class ClientErrosRequests(Base):
     __tablename__ = 'client_errors_requests'
     __table_args__ = {'mysql_charset': 'utf8'}
@@ -27,3 +34,4 @@ class ClientErrosRequests(Base):
     url = Column(String(length=400), nullable=False)
     status = Column(Integer, nullable=False)
     size = Column(Integer, nullable=False)
+

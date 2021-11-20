@@ -1,6 +1,6 @@
 from sqlalchemy import func
 
-from orm.models import CountRequests, TypedRequests, ClientErrosRequests
+from orm.models import CountRequests, FrequentRequests, TypedRequests, ClientErrosRequests
 from test_orm.base import MysqlBase
 import pandas as pd
 
@@ -35,6 +35,25 @@ class TestMysqlCreate(MysqlBase):
             mysql_orm_client.session.add(request_cnt)
             mysql_orm_client.session.commit()
         assert mysql_orm_client.session.query(TypedRequests).count() == 4
+
+    def test_frequent_requests(self, log_df, mysql_orm_client):
+        df_urls = pd.DataFrame(log_df.iloc[:, 1])
+        df_urls["cnt"] = 0
+        df_urls2 = df_urls.copy()
+        df_urls2["url_without_params"] = df_urls.apply(
+            lambda row: row["url"].split()[1], axis=1)
+        del df_urls2["url"]
+        df_urls_g = df_urls2.groupby(
+            by=["url_without_params"], as_index=False).count()
+        df = df_urls_g.sort_values("cnt", ascending=False).head(
+            10).reset_index(drop=True)
+
+        for index, row in df.iterrows():
+            request_cnt = FrequentRequests(
+                url=row['url_without params'], count=row['cnt'])
+            mysql_orm_client.session.add(request_cnt)
+            mysql_orm_client.session.commit()
+        assert mysql_orm_client.session.query(FrequentRequests).count() == 10
 
     def test_client_errors_requests(self, log_df, mysql_orm_client):
         df_filtered = log_df.query(
