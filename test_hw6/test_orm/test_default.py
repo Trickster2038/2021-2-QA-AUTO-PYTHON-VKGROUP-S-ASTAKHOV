@@ -9,13 +9,13 @@ import pytest
 @pytest.mark.ORM
 class TestMysqlLogSaving(MysqlBase):
 
-    def test_requests_count(self, log_df, mysql_orm_client):
+    def test_requests_count(self, log_df):
         counter = CountRequests(total=log_df.shape[0])
-        mysql_orm_client.session.add(counter)
-        mysql_orm_client.session.commit()
-        assert mysql_orm_client.session.query(CountRequests).count() == 1
+        self.mysql.session.add(counter)
+        self.mysql.session.commit()
+        assert self.mysql.session.query(CountRequests).count() == 1
 
-    def test_requests_by_type(self, log_df, mysql_orm_client):
+    def test_requests_by_type(self, log_df):
         df_methods_1 = log_df.copy()
 
         # generating methods column
@@ -34,11 +34,11 @@ class TestMysqlLogSaving(MysqlBase):
 
         for index, row in df.iterrows():
             request_cnt = TypedRequests(method=row['method'], count=row['cnt'])
-            mysql_orm_client.session.add(request_cnt)
-            mysql_orm_client.session.commit()
-        assert mysql_orm_client.session.query(TypedRequests).count() == 4
+            self.mysql.session.add(request_cnt)
+            self.mysql.session.commit()
+        assert self.mysql.session.query(TypedRequests).count() == 4
 
-    def test_frequent_requests(self, log_df, mysql_orm_client):
+    def test_frequent_requests(self, log_df):
         df_urls = pd.DataFrame(log_df.iloc[:, 1])
         df_urls["cnt"] = 0
         df_urls2 = df_urls.copy()
@@ -53,11 +53,11 @@ class TestMysqlLogSaving(MysqlBase):
         for index, row in df.iterrows():
             request_cnt = FrequentRequests(
                 url=row['url_without_params'], count=row['cnt'])
-            mysql_orm_client.session.add(request_cnt)
-            mysql_orm_client.session.commit()
-        assert mysql_orm_client.session.query(FrequentRequests).count() == 10
+            self.mysql.session.add(request_cnt)
+            self.mysql.session.commit()
+        assert self.mysql.session.query(FrequentRequests).count() == 10
 
-    def test_client_errors_requests(self, log_df, mysql_orm_client):
+    def test_client_errors_requests(self, log_df):
         df_filtered = log_df.query(
             "status >= 400 and status < 500 and size != '-'").iloc[:, 0:4].copy()
         df_filtered["size"] = df_filtered["size"].astype(int)
@@ -67,17 +67,17 @@ class TestMysqlLogSaving(MysqlBase):
         for index, row in df.iterrows():
             request_cnt = ClientErrosRequests(ip=row['ip'], url=row['url'],
                                               status=row['status'], size=row['size'])
-            mysql_orm_client.session.add(request_cnt)
-            mysql_orm_client.session.commit()
-        assert mysql_orm_client.session.query(ClientErrosRequests).count() == 5
+            self.mysql.session.add(request_cnt)
+            self.mysql.session.commit()
+        assert self.mysql.session.query(ClientErrosRequests).count() == 5
 
-    def test_frequent_users(self, log_df, mysql_orm_client):
+    def test_frequent_users(self, log_df):
         df_5xx = log_df.query("status >= 500 and status < 600").iloc[:, [0]]
         df_5xx["cnt"] = 0
         df = df_5xx.groupby(by=["ip"], as_index=False).count().sort_values("cnt", ascending=False).head(5).reset_index(drop=True)
 
         for index, row in df.iterrows():
             request_cnt = FrequentUsers(ip=row['ip'], count=row['cnt'])
-            mysql_orm_client.session.add(request_cnt)
-            mysql_orm_client.session.commit()
-        assert mysql_orm_client.session.query(FrequentUsers).count() == 5
+            self.mysql.session.add(request_cnt)
+            self.mysql.session.commit()
+        assert self.mysql.session.query(FrequentUsers).count() == 5
