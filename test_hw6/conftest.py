@@ -13,6 +13,8 @@ def pytest_configure(config):
     mysql_orm_client.connect(db_created=True)
     if not hasattr(config, 'workerinput'):
         mysql_orm_client.create_count_table()
+        mysql_orm_client.create_typed_requests_table()
+        mysql_orm_client.create_client_errors_requests_table()
 
     config.mysql_orm_client = mysql_orm_client
 
@@ -24,7 +26,7 @@ def mysql_orm_client(request) -> MysqlORMClient:
     client.connection.close()
 
 @pytest.fixture(scope='session')
-def log_table():
+def log_df():
     names = ["ip", "1", "2", "3", "4", "url", "status", "size", "5", "6", "7"]
     df = pd.read_csv("access.log", sep=" ", usecols=range(
     11), low_memory=False, header=None, names=names)
