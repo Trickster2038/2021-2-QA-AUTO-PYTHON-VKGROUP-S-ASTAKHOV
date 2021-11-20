@@ -1,11 +1,13 @@
 from sqlalchemy import func
+from sqlalchemy.sql.functions import count
 
-from orm.models import CountRequests, FrequentRequests, TypedRequests, ClientErrosRequests
+from orm.models import CountRequests, FrequentRequests, FrequentUsers, TypedRequests, ClientErrosRequests
 from test_orm.base import MysqlBase
 import pandas as pd
+import pytest
 
-
-class TestMysqlCreate(MysqlBase):
+@pytest.mark.ORM
+class TestMysqlLogSaving(MysqlBase):
 
     def test_requests_count(self, log_df, mysql_orm_client):
         counter = CountRequests(total=log_df.shape[0])
@@ -50,7 +52,7 @@ class TestMysqlCreate(MysqlBase):
 
         for index, row in df.iterrows():
             request_cnt = FrequentRequests(
-                url=row['url_without params'], count=row['cnt'])
+                url=row['url_without_params'], count=row['cnt'])
             mysql_orm_client.session.add(request_cnt)
             mysql_orm_client.session.commit()
         assert mysql_orm_client.session.query(FrequentRequests).count() == 10
@@ -68,3 +70,14 @@ class TestMysqlCreate(MysqlBase):
             mysql_orm_client.session.add(request_cnt)
             mysql_orm_client.session.commit()
         assert mysql_orm_client.session.query(ClientErrosRequests).count() == 5
+
+    def test_frequent_users(self, log_df, mysql_orm_client):
+        df_5xx = log_df.query("status >= 500 and status < 600").iloc[:, [0]]
+        df_5xx["cnt"] = 0
+        df = df_5xx.groupby(by=["ip"], as_index=False).count().sort_values("cnt", ascending=False).head(5).reset_index(drop=True)
+
+        for index, row in df.iterrows():
+            request_cnt = FrequentUsers(ip=row['ip'], count=row['cnt'])
+            mysql_orm_client.session.add(request_cnt)
+            mysql_orm_client.session.commit()
+        assert mysql_orm_client.session.query(FrequentUsers).count() == 5
