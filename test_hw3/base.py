@@ -1,6 +1,4 @@
 import pytest
-from api.jsons import *
-
 
 class ApiBase:
     @pytest.fixture(scope='function', autouse=True)

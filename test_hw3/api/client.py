@@ -1,6 +1,6 @@
 import requests
 import urllib
-from api.jsons import *
+from api.data_templates import *
 import json
 import os
 
@@ -16,7 +16,6 @@ class ApiClient:
     def post_login(self, username, passw):
         url = "https://auth-ac.my.com/auth"
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
             'Referer': 'https://target.my.com/'
         }
         username = urllib.parse.quote(username.encode('utf-8'))
@@ -35,28 +34,25 @@ class ApiClient:
         return response
 
     def post_create_campaign(self, name):
-        payload = CampaignJsons.DEFAULT
-        
-        payload["banners"][0]["content"]["image_90x75"]["id"] = self.post_upload_image()
+        payload = CampaignDataTemplates.DEFAULT
+        id = int(self.post_upload_image().json()['id'])
+        payload["banners"][0]["content"]["image_90x75"]["id"] = id
         payload["banners"][0]["urls"]["primary"]["id"] = self.get_url_id()
         payload['name'] = name
-        payload = json.dumps(payload)
         url = "https://target.my.com/api/v2/campaigns.json"
         headers = {
             'X-CSRFToken': self.csrf_token,
-            'Content-Type': 'application/json'
         }
         return self.session.request(
-            "POST", url, headers=headers, data=payload)
+            "POST", url, headers=headers, json=payload)
 
     def post_remove_campaign(self, id):
         url = "https://target.my.com/api/v2/campaigns/mass_action.json"
         headers = {
             'X-CSRFToken': self.csrf_token,
-            'Content-Type': 'application/json'
         }
-        payload = json.dumps([{"id": id, "status": "deleted"}])
-        return self.session.request("POST", url, headers=headers, data=payload)
+        payload = [{"id": id, "status": "deleted"}]
+        return self.session.request("POST", url, headers=headers, json=payload)
 
     def get_campaigns(self):
         url = "https://target.my.com/api/v2/campaigns.json?fields=id%2Cname%2Cautobidding_mode&_status__in=active"
@@ -66,12 +62,10 @@ class ApiClient:
         url = "https://target.my.com/api/v2/remarketing/segments.json"
         headers = {
             'X-CSRFToken': self.csrf_token,
-            'Content-Type': 'application/json'
         }
-        payload = SegmentJsons.DEFAULT
+        payload = SegmentDataTemplates.DEFAULT
         payload['name'] = name
-        payload = json.dumps(payload)
-        return self.session.request("POST", url, headers=headers, data=payload)
+        return self.session.request("POST", url, headers=headers, json=payload)
 
     def get_segments(self):
         url = "https://target.my.com/api/v2/remarketing/segments.json?fields=id,name&limit=500"
@@ -94,9 +88,8 @@ class ApiClient:
             'file': (os.path.basename(pic_path), open(pic_path, 'rb'), 'image/jpeg'),
             'data': (None, json.dumps({"width": 0, "height": 0})),
         }
-        resp = self.session.request(
+        return self.session.request(
             "POST", url, headers=headers, files=file)
-        return int(resp.json()["id"])
 
     def get_url_id(self, target_url="https://vk.com/feed"):
         target_url = urllib.parse.quote(target_url.encode('utf-8'))

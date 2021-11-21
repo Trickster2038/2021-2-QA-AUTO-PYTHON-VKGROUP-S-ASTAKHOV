@@ -2,9 +2,9 @@ import pytest
 from base import ApiBase
 from utils.rand import RandString
 
-
+@pytest.mark.API
 class TestApi(ApiBase):
-    @pytest.mark.API
+    
     def test_create_n_delete_campaign(self):
         name = RandString.generate(prefix="Новый сегмент")
         response = self.api_client.post_create_campaign(name)
@@ -15,7 +15,6 @@ class TestApi(ApiBase):
         assert resp_delete.status_code == 204
         assert not self.check_campaign_presence(name)
 
-    @pytest.mark.API
     def test_create_segment(self):
         name = RandString.generate(prefix="Новый сегмент")
         response = self.api_client.post_create_segment(name)
@@ -23,7 +22,6 @@ class TestApi(ApiBase):
         assert self.check_segment_presence(name)
         self.api_client.delete_segment(id)
 
-    @pytest.mark.API
     def test_delete_segment(self):
         name = RandString.generate(prefix="Новый сегмент")
         response = self.api_client.post_create_segment(name)
