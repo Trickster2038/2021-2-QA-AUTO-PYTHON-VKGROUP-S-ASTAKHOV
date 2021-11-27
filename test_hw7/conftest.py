@@ -4,7 +4,7 @@ from _pytest.fixtures import yield_fixture
 from mock import flask_mock
 from mock.flask_mock import SURNAME_DATA
 
-
+import logging
 import requests
 from requests.exceptions import ConnectionError
 
@@ -47,7 +47,7 @@ def pytest_unconfigure(config):
 @pytest.fixture(scope="session")
 def client():
     url = f'http://{settings.MOCK_HOST}:{settings.MOCK_PORT}'
-    client = ClientRequests(url)
+    client = ClientRequests(url, logging.INFO)
     yield client 
 
 @pytest.fixture(scope="function", autouse=True)
