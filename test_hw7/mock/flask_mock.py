@@ -5,9 +5,28 @@ from flask import Flask, jsonify, request
 import logging
 import settings
 from werkzeug.serving import WSGIRequestHandler
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'file': {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'formatter': 'default',
+        'filename': 'mock_server.log',
+        'maxBytes': 1024*1024,
+        'backupCount': 3
+    }
+    },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['file']
+    }
+})
 
 app = Flask(__name__)
-logging.basicConfig(filename='mock.log')
 
 SURNAME_DATA = {}
 
@@ -16,14 +35,14 @@ def get_user_surname(name):
     if surname := SURNAME_DATA.get(name):
         return jsonify(surname), 200
     else:
-        return jsonify(f'Surname for user "{name}" not found'), 404
+        return jsonify(f'Surname for user {name} not found'), 404
 
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
     name = request.get_json()['name']
     if name in SURNAME_DATA:
-        return jsonify(f'User {name} already exist'), 404
+        return jsonify(f'User {name} already exists'), 404
     else:
         SURNAME_DATA[name] = None
         return jsonify(f'User {name} created'), 200
@@ -59,6 +78,7 @@ def shutdown_stub():
 def shutdown():
     shutdown_stub()
     return jsonify(f'Ok, exiting'), 200
+
 
 def run_mock():
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
