@@ -13,5 +13,3 @@ class MysqlBase:
     def setup(self, mysql_orm_client):
         self.mysql: MysqlORMClient = mysql_orm_client
         self.prepare()
-
-    

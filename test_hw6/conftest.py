@@ -1,5 +1,4 @@
 import pytest
-
 from orm.client import MysqlORMClient
 import pandas as pd
 from credentials import Database
@@ -26,12 +25,22 @@ def mysql_orm_client(request) -> MysqlORMClient:
     yield client
     client.connection.close()
 
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--logfile", action="store", default="access.log", help="log file name"
+    )
+
+
 @pytest.fixture(scope='session')
-def log_df():
+def logfile(request):
+    return request.config.getoption("--logfile")
+
+
+@pytest.fixture(scope='session')
+def log_df(logfile):
     names = ["ip", "1", "2", "3", "4", "url", "status", "size", "5", "6", "7"]
-    df = pd.read_csv("access.log", sep=" ", usecols=range(
-    11), low_memory=False, header=None, names=names)
+    df = pd.read_csv(logfile, sep=" ", usecols=range(
+        11), low_memory=False, header=None, names=names)
     df = df.iloc[:, [0, 5, 6, 7, 8, 9, 10]]
     yield df
-
-
