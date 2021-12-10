@@ -2,7 +2,7 @@ import sqlalchemy
 from sqlalchemy import inspect
 from sqlalchemy.orm import sessionmaker
 
-from orm.models import Base
+from orm.models import Base, ClientErrosRequests, CountRequests, FrequentRequests, FrequentUsers, TypedRequests
 
 
 class MysqlORMClient:
@@ -63,3 +63,34 @@ class MysqlORMClient:
         res = self.connection.execute(query)
         if fetch:
             return res.fetchall()
+
+    def insert_count_requests(self, df):
+        counter = CountRequests(total=df.shape[0])
+        self.session.add(counter)
+        self.session.commit()
+
+    def insert_typed_requests(self, df):
+        for index, row in df.iterrows():
+            request_cnt = TypedRequests(method=row['method'], count=row['cnt'])
+            self.session.add(request_cnt)
+            self.session.commit()
+
+    def insert_frequent_requests(self, df):
+        for index, row in df.iterrows():
+            request_cnt = FrequentRequests(
+                url=row['url_without_params'], count=row['cnt'])
+            self.session.add(request_cnt)
+            self.session.commit()
+
+    def insert_client_errors_requests(self, df):
+        for index, row in df.iterrows():
+            request_cnt = ClientErrosRequests(ip=row['ip'], url=row['url'],
+                                              status=row['status'], size=row['size'])
+            self.session.add(request_cnt)
+            self.session.commit()
+
+    def insert_frequent_users(self, df):
+        for index, row in df.iterrows():
+            request_cnt = FrequentUsers(ip=row['ip'], count=row['cnt'])
+            self.session.add(request_cnt)
+            self.session.commit()
