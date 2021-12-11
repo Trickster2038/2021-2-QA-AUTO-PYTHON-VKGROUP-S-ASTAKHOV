@@ -1,7 +1,7 @@
 import os
 import time
 from _pytest.fixtures import yield_fixture
-from mock import flask_mock
+from mock.flask_mock import run_mock
 from mock.flask_mock import SURNAME_DATA
 
 import logging
@@ -35,9 +35,7 @@ def wait_ready(host, port):
 
 def pytest_configure(config):
     if not hasattr(config, 'workerinput'):
-        
-        flask_mock.run_mock()
-
+        run_mock()
         wait_ready(settings.MOCK_HOST, settings.MOCK_PORT)
 
 
