@@ -55,7 +55,7 @@ def update_user(name):
         SURNAME_DATA[name] = surname
         return jsonify(f'User {name} updated'), 200
     else:
-        SURNAME_DATA[name] = None
+        # SURNAME_DATA[name] = None
         return jsonify(f'User {name} does not exist'), 404
 
 
@@ -68,7 +68,7 @@ def delete_user(name):
         return jsonify(f'User {name} does not exist'), 404
 
 
-def shutdown_stub():
+def shutdown_mock():
     terminate_func = request.environ.get('werkzeug.server.shutdown')
     if terminate_func:
         terminate_func()
@@ -76,7 +76,7 @@ def shutdown_stub():
 
 @app.route('/shutdown')
 def shutdown():
-    shutdown_stub()
+    shutdown_mock()
     return jsonify(f'Ok, exiting'), 200
 
 
