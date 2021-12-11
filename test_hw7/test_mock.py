@@ -14,7 +14,6 @@ class TestMock:
             del SURNAME_DATA[key]
         yield
 
-    @pytest.mark.F
     def test_get_surname(self, first_name, last_name, client: ClientRequests):
         SURNAME_DATA[first_name] = last_name
         resp = client.get_surname(first_name)
