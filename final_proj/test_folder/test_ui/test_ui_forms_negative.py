@@ -168,14 +168,14 @@ class TestRegisterPageNegative(BaseCase):
         assert self.register_page.notification_include('User already exist')
         assert self.register_page.notification_text_clear()
 
-    @pytest.mark.xfail(reason="no checking double email usage")
+    @pytest.mark.xfail(reason="error 500")
     def test_double_email(self):
         '''
         1 - Go to registration page
         2 - Register user
         3 - Return to registration page
         4 - Try to register with same email
-        3 - Check notifications about existance of such user
+        3 - Check notifications dont include 500 error
         '''
         self.register_page.go_to_this_page()
         self.register_page.register(
@@ -191,5 +191,5 @@ class TestRegisterPageNegative(BaseCase):
         self.fake_person.password,
         self.fake_person.password, True)
         assert self.register_page.blocked_on_page()
-        assert self.register_page.notification_include('User already exist')
+        assert not self.register_page.notification_include('internal server error')
         assert self.register_page.notification_text_clear()

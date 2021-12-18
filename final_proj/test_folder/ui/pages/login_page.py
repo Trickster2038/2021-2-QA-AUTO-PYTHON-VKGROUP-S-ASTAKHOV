@@ -37,7 +37,7 @@ class LoginPage(BasePage):
             i += 1
         allure.attach(self.driver.get_screenshot_as_png(),
                       name="notification", attachment_type=AttachmentType.PNG)
-        return elem.text.count(msg) > 0
+        return elem.text.lower().count(msg.lower()) > 0
 
     def notification_text_clear(self):
         i = 0

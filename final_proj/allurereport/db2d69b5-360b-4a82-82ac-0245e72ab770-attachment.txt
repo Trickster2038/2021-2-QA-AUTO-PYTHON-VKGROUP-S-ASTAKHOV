@@ -1,3 +1,0 @@
-Name: Cassandra         
-Email: Hernandez@gmail.com         
-Password: atdiscovertable

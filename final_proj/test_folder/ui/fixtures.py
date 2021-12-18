@@ -1,4 +1,3 @@
-import logging
 from selenium import webdriver
 import pytest
 from ui.pages.login_page import LoginPage
@@ -7,9 +6,6 @@ from ui.pages.main_page import MainPage
 from ui.pages.base import BasePage
 from api.mock_client import MockClient
 from config import *
-
-logger = logging.getLogger('DriverSetup')
-
 
 @pytest.fixture(scope='function', autouse=False)
 def driver():
@@ -22,10 +18,8 @@ def driver():
                     # 'applicationContainers': ["app_docker:app_docker"]
                     # 'hostsEntries': ["127.0.0.1:127.0.0.1"]
                     }
-    logger.info('before setup')
     browser = webdriver.Remote(command_executor=f'http://{SELENOID_HOST}:{SELENOID_PORT}/wd/hub',
                                options=chrome_options, desired_capabilities=capabilities)
-    logger.info('after setup')
     browser.implicitly_wait(5)
     yield browser
     browser.quit()

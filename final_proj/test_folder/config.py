@@ -1,4 +1,4 @@
-APP_HOST = "192.168.43.171" # localhost IP on LAN
+APP_HOST = "192.168.1.65" # localhost IP on LAN
 APP_PORT = 8080
 
 API_CLIENT_USERNAME = "trickster"
