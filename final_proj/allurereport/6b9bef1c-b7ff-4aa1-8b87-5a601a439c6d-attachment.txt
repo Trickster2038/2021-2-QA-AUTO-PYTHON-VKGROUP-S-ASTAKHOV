@@ -1,0 +1,2 @@
+[32mINFO    [0m DriverSetup:fixtures.py:25 before setup
+[32mINFO    [0m DriverSetup:fixtures.py:28 after setup
