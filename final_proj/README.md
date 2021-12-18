@@ -23,7 +23,7 @@ GET http://<APP_HOST>:<APP_PORT>/api/del_user/<username>
 
 ![ ](./screenshots/json_notice.png)
 
-- 500 ошибка при введении только имени и почты в поле регистрации
+- 500 ошибка при повторении email при регистрации
 
 ![ ](./screenshots/500error.png)
 
