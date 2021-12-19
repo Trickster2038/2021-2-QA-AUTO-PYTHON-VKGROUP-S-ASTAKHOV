@@ -66,11 +66,15 @@ class TestMainPage(BaseCase):
                                  pytest.param(MainPageLocators.TAB_PYTHON,
                                               [(
                                                   MainPageLocators.LINK_PYHTON_HISTORY, 'History_of_Python')
-                                               ], marks=pytest.mark.xfail(reason="no new tab")),
+                                               ],
+                                              #    marks=pytest.mark.xfail(reason="no new tab")
+                                              ),
                                  pytest.param(MainPageLocators.TAB_LINUX,
                                               [(
                                                   MainPageLocators.LINK_CENTOS, 'cent')
-                                               ], marks=pytest.mark.xfail(reason="mismatched links"))
+                                               ],
+                                              #    marks=pytest.mark.xfail(reason="mismatched links")
+                                              )
                              ])
     def test_tabs_valid(self, tab, link_pairs):
         '''

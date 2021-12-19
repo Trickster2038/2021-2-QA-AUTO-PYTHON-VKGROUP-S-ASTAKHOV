@@ -37,7 +37,7 @@ def test_add_user(fake_person, api_cli, orm_cli: MysqlORMClient):
 @allure.story("invalid data")
 
 @pytest.mark.API
-@pytest.mark.xfail(reason="no validation - email")
+# @pytest.mark.xfail(reason="no validation - email")
 def test_add_user_invalid_email(fake_person, api_cli, orm_cli: MysqlORMClient):
     '''
     1 - Count users
@@ -54,7 +54,7 @@ def test_add_user_invalid_email(fake_person, api_cli, orm_cli: MysqlORMClient):
 @allure.epic("API")
 @allure.feature("add user")
 @allure.story("invalid data")
-@pytest.mark.xfail(reason="no validation - password")
+# @pytest.mark.xfail(reason="no validation - password")
 @pytest.mark.API
 def test_add_user_empty_password(fake_person, api_cli, orm_cli: MysqlORMClient):
     '''
@@ -72,7 +72,7 @@ def test_add_user_empty_password(fake_person, api_cli, orm_cli: MysqlORMClient):
 @allure.epic("API")
 @allure.feature("add user")
 @allure.story("invalid data")
-@pytest.mark.xfail(reason="no validation - username")
+# @pytest.mark.xfail(reason="no validation - username")
 @pytest.mark.API
 def test_add_user_empty_username(fake_person, api_cli, orm_cli: MysqlORMClient):
     '''
@@ -90,7 +90,7 @@ def test_add_user_empty_username(fake_person, api_cli, orm_cli: MysqlORMClient):
 @allure.epic("API")
 @allure.feature("add user")
 @allure.story("invalid data")
-@pytest.mark.xfail(reason="no validation - email")
+# @pytest.mark.xfail(reason="no validation - email")
 @pytest.mark.API
 def test_add_existing_email_user(fake_person, api_cli, orm_cli: MysqlORMClient):
     '''

@@ -125,7 +125,7 @@ class TestRegisterPageNegative(BaseCase):
             self.fake_person.password, False)
         assert self.register_page.blocked_on_page()
 
-    @pytest.mark.xfail(reason="notification dont render json")
+    # @pytest.mark.xfail(reason="notification dont render json")
     def test_invalid_multiple(self):
         '''
         1 - Go to registration page
@@ -168,7 +168,7 @@ class TestRegisterPageNegative(BaseCase):
         assert self.register_page.notification_include('User already exist')
         assert self.register_page.notification_text_clear()
 
-    @pytest.mark.xfail(reason="error 500")
+    # @pytest.mark.xfail(reason="error 500")
     def test_double_email(self):
         '''
         1 - Go to registration page
